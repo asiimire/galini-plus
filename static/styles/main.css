@@ -1,0 +1,46 @@
+body {
+    background-color: aquamarine;
+}
+
+
+#success-icon {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#success-icon svg {
+    width: 200px;
+    height:200px;
+}
+
+#google_translate_element {
+    margin-left: auto;
+    margin-right: 0;
+    padding: 0.5rem;
+}
+
+
+.typing-container {
+    border-right: 2px solid #555; /* Simulates a typing cursor */
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 1.5rem;
+    color: #555;
+    padding: 0 10px;
+    animation: typing 4s steps(40, end) 1s 1 normal both, cursor 0.75s step-end infinite;
+}
+.typing-text {
+    display: inline;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes cursor {
+    from { border-right-color: rgba(0, 0, 0, 0.75); }
+    to { border-right-color: transparent; }
+}

@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: galiniplus
+      POSTGRES_USER: galiniplus_user
+      POSTGRES_PASSWORD: YfwPYOyl60rStM6A7krSuKnZI9cd2XyB
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      
+    networks:
+      - django_network
+
+  web:
+    build: .
+    command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - media_data:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - django_network
+    environment:
+      - DATABASE_URL=postgresql://galiniplus_user:YfwPYOyl60rStM6A7krSuKnZI9cd2XyB@db:5432/galiniplus
+
+networks:
+  django_network:
+
+volumes:
+  postgres_data:
+  media_data:

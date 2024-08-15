@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+    
+    <div class="dashboard">
+        <h1>Welcome, {{name}}!</h1>
+        <!-- create a "New Meeting" button -->
+        <a href="{% url "meeting" %}" class="btn btn-success">New Meeting</a>
+        <a href="{% url "join" %}" class="btn btn-success">Join Meeting</a>
+    </div>
+
+    
+  {% endblock %}

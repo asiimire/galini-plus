@@ -1,0 +1,4 @@
+create user roles: regular and therapist and admin
+(regular user is not allowed to create a profile because of privacy policy. they just had ids)
+search option
+fix the emails "from"

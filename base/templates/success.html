@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+  <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1 style="font-size: 3rem; color: #4CAF50; font-family: 'Arial', sans-serif;">Success!</h1>
+        <br /><br /><br />
+
+        <div id="success-icon" style="display: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="100" height="100" fill="green">
+            <circle cx="25" cy="25" r="24" stroke="green" stroke-width="2" fill="none" />
+            <path d="M20 30L14 24a1 1 0 00-1.41 1.41l7 7a1 1 0 001.41 0l16-16a1 1 0 00-1.41-1.41L20 30z" fill="green" />
+          </svg>
+        </div>
+        <br /><br />
+        <div class="typing-container">
+          <p id="typing-text" class="typing-text"></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} <script>
+    async function translateText(text, targetLanguage) {
+      const apiKey = '{{ google_translate_api_key }}'
+      const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          q: text,
+          target: targetLanguage
+        })
+      })
+      const data = await response.json()
+      return data.data.translations[0].translatedText
+    }
+    
+    async function typeText() {
+      const text = "We have received your email and we'll respond shortly..."
+      const targetLanguage = 'es' // Replace with desired target language code
+      let index = 0
+      const speed = 30 // Speed of typing in milliseconds
+      let translatedText = await translateText(text, targetLanguage)
+    
+      function displayText() {
+        if (index < translatedText.length) {
+          document.getElementById('typing-text').innerHTML += `<span style="font-size: 1.5rem; color: #555; font-family: 'Georgia', serif;">${translatedText.charAt(index)}</span>`
+          index++
+          setTimeout(displayText, speed)
+        }
+      }
+    
+      displayText()
+    }
+    
+    typeText()
+  </script> {% endcomment %}
+
+  <script>
+    function showSuccessIcon() {
+      const successIcon = document.getElementById('success-icon')
+      successIcon.style.display = 'block'
+    }
+    
+    // Call this function after the form is successfully submitted
+    showSuccessIcon()
+  </script>
+{% endblock %}
