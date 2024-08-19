@@ -360,8 +360,12 @@ def search(request):
 
 def search_user(request):
     if request.method == "POST":
-        search = request.POST["search"]
-        searched = User.objects.filter(Q(username__icontains = search) | Q(first_name__icontains = search) | Q(last_name__icontains = search))
+        search = request.POST.get("search", "")
+        searched = User.objects.filter(
+            Q(username__icontains=search) |
+            Q(first_name__icontains=search) |
+            Q(last_name__icontains=search)
+        )
         return render(request, "search_user.html", {"search": search, 'searched': searched})
     else:
         return render(request, "search_user.html", {})
