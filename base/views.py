@@ -347,14 +347,15 @@ def edit_meep(request, pk):
 #     else:
 #         return render(request, "search.html", {})
 
-
 def search(request):
-    if request.method == "POST":
-        search = request.POST.get("search", "")
-        searched = Meep.objects.filter(body__icontains=search)
+    search_query = request.POST.get("search", "")
+    meeps = None
+    
+    if search_query:
+        meeps = Meep.objects.filter(body__icontains=search_query)
 
         # Pagination
-        paginator = Paginator(searched, 10)  # Show 10 meeps per page
+        paginator = Paginator(meeps, 10)  # Show 10 meeps per page
         page = request.GET.get('page')
 
         try:
@@ -366,9 +367,7 @@ def search(request):
             # If page is out of range (e.g. 9999), deliver last page of results.
             meeps = paginator.page(paginator.num_pages)
 
-        return render(request, "search.html", {"search": search, 'meeps': meeps})
-
-    return render(request, "search.html", {})
+    return render(request, "search.html", {"search": search_query, 'searched': meeps})
 
 # users section
 
