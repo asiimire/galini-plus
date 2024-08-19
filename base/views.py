@@ -15,6 +15,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email as django_validate_email
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # from django.views.generic import ListView, DetailView
 
@@ -336,16 +337,39 @@ def edit_meep(request, pk):
         messages.error(request, ("Please login in to continue"))
         return redirect("home")
 
+# def search(request):
+#     if request.method == "POST":
+#         # grab the form field input
+#         search = request.POST["search"]
+#         # search the database
+#         searched = Meep.objects.filter(body__contains = search)
+#         return render(request, "search.html", {"search": search, 'searched': searched})
+#     else:
+#         return render(request, "search.html", {})
+
+
 def search(request):
     if request.method == "POST":
-        # grab the form field input
-        search = request.POST["search"]
-        # search the database
-        searched = Meep.objects.filter(body__contains = search)
-        return render(request, "search.html", {"search": search, 'searched': searched})
-    else:
-        return render(request, "search.html", {})
-    
+        search = request.POST.get("search", "")
+        searched = Meep.objects.filter(body__icontains=search)
+
+        # Pagination
+        paginator = Paginator(searched, 10)  # Show 10 meeps per page
+        page = request.GET.get('page')
+
+        try:
+            meeps = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            meeps = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            meeps = paginator.page(paginator.num_pages)
+
+        return render(request, "search.html", {"search": search, 'meeps': meeps})
+
+    return render(request, "search.html", {})
+
 # users section
 
 # def search_user(request):
@@ -366,9 +390,24 @@ def search_user(request):
             Q(first_name__icontains=search) |
             Q(last_name__icontains=search)
         )
-        return render(request, "search_user.html", {"search": search, 'searched': searched})
-    else:
-        return render(request, "search_user.html", {})
+
+        # Pagination
+        paginator = Paginator(searched, 10)  # Show 10 users per page
+        page = request.GET.get('page')
+
+        try:
+            users = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            users = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            users = paginator.page(paginator.num_pages)
+
+        return render(request, "search_user.html", {"search": search, 'users': users})
+
+    return render(request, "search_user.html", {})
+
 
 # sms section
 def broadcast_sms(request):

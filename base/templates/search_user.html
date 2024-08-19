@@ -1,4 +1,4 @@
-{% extends 'main.html' %}
+<!-- {% extends 'main.html' %}
 {% load static %}
 {% block content %}
   <div class="container text-center">
@@ -50,6 +50,82 @@
           {% else %}
             <p>Sorry, that user does not exist...</p>
           {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %} -->
+
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-8">
+        <h2>Search Users</h2>
+        <br />
+
+        <form class="d-flex" method="post">
+          {% csrf_token %}
+          <input class="form-control me-2" type="input" placeholder="Search Users" name="search" />
+          <button class="btn" style="background-color: #fec017;" type="submit">Search</button>
+        </form>
+        <br />
+        <br />
+        {% if search %}
+          <h3>You searched for: {{ search }}</h3>
+          <br /><br />
+        {% endif %}
+        {% if users %}
+          {% for result in users %}
+            <div class="card mb-3" style="max-width: 540px;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  {% if result.profile.profile_image %}
+                    <img src="{{ result.profile.profile_image.url }}" style="width: 300px; height: 300px;" class="img-fluid rounded-start" alt="{{ result.profile.profile.username }}" />
+                  {% else %}
+                    <img src="{% static 'images/dumprofile.png' %}" class="img-fluid rounded-start" alt="Default Profile Image" />
+                  {% endif %}
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ result.profile.user.username }}</h5>
+                    <p class="card-text">
+                      <a href="{% url 'profile' result.profile.user.id %}">@{{ result.profile.user.username|lower }}</a>
+                    </p>
+                    <br /><br />
+                    <p class="card-text">
+                      <small class="text-muted">Last Updated: {{ result.profile.date_modified }}</small>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br /><br />
+          {% endfor %}
+
+          <!-- Pagination Controls -->
+          <div class="pagination">
+            {% if users.has_previous %}
+              <a href="?page=1{% if search %}&search={{ search }}{% endif %}">&laquo; first</a>
+              <a href="?page={{ users.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">previous</a>
+            {% endif %}
+
+            {% for num in users.paginator.page_range %}
+              {% if users.number == num %}
+                <span class="current">{{ num }}</span>
+              {% else %}
+                <a href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+
+            {% if users.has_next %}
+              <a href="?page={{ users.next_page_number }}{% if search %}&search={{ search }}{% endif %}">next</a>
+              <a href="?page={{ users.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}">last &raquo;</a>
+            {% endif %}
+          </div>
+        {% else %}
+          <p>Sorry, that user does not exist...</p>
         {% endif %}
       </div>
     </div>
