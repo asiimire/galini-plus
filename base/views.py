@@ -181,47 +181,6 @@ def register_user(request):
     return render(request, "register.html", {"form": form})
 
 
-# def update_profile(request):
-#     if request.user.is_authenticated:
-#         current_user = User.objects.get(id=request.user.id)
-#         profile_user = Profile.objects.get(user__id=request.user.id)
-        
-#         # Store the original firstname and lastname
-#         original_firstname = current_user.first_name
-#         original_lastname = current_user.last_name
-
-#         # Get forms
-#         user_form = SignUpForm(
-#             request.POST or None, request.FILES or None, instance=current_user
-#         )
-#         profile_form = ProfilePicForm(
-#             request.POST or None, request.FILES or None, instance=profile_user
-#         )
-
-#         if user_form.is_valid() and profile_form.is_valid():
-#             # Save the user form with partial=True to allow only the provided fields to be updated
-#             user_form.save(commit=False)
-
-#             # Restore the original firstname and lastname
-#             current_user.first_name = original_firstname
-#             current_user.last_name = original_lastname
-
-#             current_user.save()  # Now save the user with the original names
-#             profile_form.save()  # Save profile form with any updated data
-
-#             login(request, current_user)
-#             messages.success(request, "Your profile has been updated successfully")
-#             return redirect("home")
-
-#         return render(
-#             request,
-#             "update_profile.html",
-#             {"user_form": user_form, "profile_form": profile_form},
-#         )
-#     else:
-#         messages.success(request, "Please login to view this page.")
-#         return redirect("home")
-
 def update_profile(request):
     if request.user.is_authenticated:
         current_user = User.objects.get(id=request.user.id)
@@ -239,8 +198,7 @@ def update_profile(request):
             request.POST or None, request.FILES or None, instance=profile_user
         )
 
-        # Check if either form is valid
-        if user_form.is_valid():
+        if user_form.is_valid() or profile_form.is_valid():
             # Save the user form with partial=True to allow only the provided fields to be updated
             user_form.save(commit=False)
 
@@ -249,14 +207,10 @@ def update_profile(request):
             current_user.last_name = original_lastname
 
             current_user.save()  # Now save the user with the original names
-
-            messages.success(request, "Your profile details have been updated successfully")
-            return redirect("home")
-
-        if profile_form.is_valid():
             profile_form.save()  # Save profile form with any updated data
 
-            messages.success(request, "Your profile image has been updated successfully")
+            login(request, current_user)
+            messages.success(request, "Your profile has been updated successfully")
             return redirect("home")
 
         return render(
@@ -267,6 +221,52 @@ def update_profile(request):
     else:
         messages.success(request, "Please login to view this page.")
         return redirect("home")
+
+# def update_profile(request):
+#     if request.user.is_authenticated:
+#         current_user = User.objects.get(id=request.user.id)
+#         profile_user = Profile.objects.get(user__id=request.user.id)
+        
+#         # Store the original firstname and lastname
+#         original_firstname = current_user.first_name
+#         original_lastname = current_user.last_name
+
+#         # Get forms
+#         user_form = SignUpForm(
+#             request.POST or None, request.FILES or None, instance=current_user
+#         )
+#         profile_form = ProfilePicForm(
+#             request.POST or None, request.FILES or None, instance=profile_user
+#         )
+
+#         # Check if either form is valid
+#         if user_form.is_valid():
+#             # Save the user form with partial=True to allow only the provided fields to be updated
+#             user_form.save(commit=False)
+
+#             # Restore the original firstname and lastname
+#             current_user.first_name = original_firstname
+#             current_user.last_name = original_lastname
+
+#             current_user.save()  # Now save the user with the original names
+
+#             messages.success(request, "Your profile details have been updated successfully")
+#             return redirect("home")
+
+#         if profile_form.is_valid():
+#             profile_form.save()  # Save profile form with any updated data
+
+#             messages.success(request, "Your profile image has been updated successfully")
+#             return redirect("home")
+
+#         return render(
+#             request,
+#             "update_profile.html",
+#             {"user_form": user_form, "profile_form": profile_form},
+#         )
+#     else:
+#         messages.success(request, "Please login to view this page.")
+#         return redirect("home")
 
 
 # meep section
@@ -345,16 +345,24 @@ def search(request):
         return render(request, "search.html", {})
     
 # users section
+
+# def search_user(request):
+#     if request.method == "POST":
+#         # grab the form field input
+#         search = request.POST["search"]
+#         # search the database
+#         searched = User.objects.filter(username__icontains = search)
+#         return render(request, "search_user.html", {"search": search, 'searched': searched})
+#     else:
+#         return render(request, "search_user.html", {})
+
 def search_user(request):
     if request.method == "POST":
-        # grab the form field input
         search = request.POST["search"]
-        # search the database
-        searched = User.objects.filter(username__icontains = search)
+        searched = User.objects.filter(Q(username__icontains = search) | Q(first_name__icontains = search) | Q(last_name__icontains = search))
         return render(request, "search_user.html", {"search": search, 'searched': searched})
     else:
         return render(request, "search_user.html", {})
-
 
 # sms section
 def broadcast_sms(request):
