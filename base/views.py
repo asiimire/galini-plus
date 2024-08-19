@@ -17,10 +17,10 @@ from django.core.validators import validate_email as django_validate_email
 # from django.views.generic import ListView, DetailView
 
 # phq9 calc
-def phq9_calculator_view(request):
+def phq9_calculator(request):
     return render(request, 'phq9_calculator.html')
-# home section
 
+# home section
 def home(request):
     if request.user.is_authenticated:
         form = MeepForm(request.POST or None)
