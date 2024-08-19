@@ -1,5 +1,7 @@
+{% extends 'main.html' %}
 {% load static %}
-{% include 'base.html' %}
+
+{% block content %}
 
 <div class="d1">
   <div class="d2">
@@ -12,7 +14,6 @@ onload="removeNavbar(this)"></iframe>
 <a href="{% url 'home' %}" class="btn"></a>
 </div>
 
-{% include 'footer.html' %}
 <style>
   .embedded-iframe {
       width: 100%;
@@ -35,4 +36,5 @@ onload="removeNavbar(this)"></iframe>
   }
 </script>
 
+{% endblock %}
 
