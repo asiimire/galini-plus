@@ -1,0 +1,13 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"features": {
+		"ghcr.io/bartventer/arch-devcontainer-features/docker-in-docker:1": {
+			"azureDnsAutoDetection": true,
+			"installDockerBuildx": true,
+			"installDockerComposeSwitch": true,
+			"enableDockerAutocompletion": true,
+			"version": "latest",
+			"dockerDashComposeVersion": "v2"
+		}
+	}
+}

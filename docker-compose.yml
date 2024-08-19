@@ -4,12 +4,11 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_DB: galiniplus
-      POSTGRES_USER: galiniplus_user
-      POSTGRES_PASSWORD: YfwPYOyl60rStM6A7krSuKnZI9cd2XyB
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      
     networks:
       - django_network
 
@@ -26,7 +25,7 @@ services:
     networks:
       - django_network
     environment:
-      - DATABASE_URL=postgresql://galiniplus_user:YfwPYOyl60rStM6A7krSuKnZI9cd2XyB@db:5432/galiniplus
+      - DATABASE_URL=${DATABASE_URL}
 
 networks:
   django_network:
