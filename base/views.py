@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import BroadcastMessage, User, Profile, Meep
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import MeepForm, SignUpForm, ProfilePicForm, AppointmentForm
+from .forms import MeepForm, UserSignUpForm, TherapistSignUpForm, ProfilePicForm, AppointmentForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
@@ -165,10 +165,41 @@ def logout_user(request):
     return redirect("home")
 
 
-def register_user(request):
-    form = SignUpForm()
+# def register_user(request):
+#     form = SignUpForm()
+#     if request.method == "POST":
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             username = form.cleaned_data["username"]
+#             password = form.cleaned_data["password1"]
+
+#             # Authenticate and log in the user
+#             user = authenticate(username=username, password=password)
+#             if user is not None:
+#                 login(request, user)
+#                 messages.success(request, "You have been registered successfully. Please update your profile.")
+#                 return redirect("update_profile")  # Redirect to the profile update page instead of home
+
+#     return render(request, "register.html", {"form": form})
+
+def register_user(request, role):
+    # Choose the form based on the role
+    if role == 'user':
+        form = UserSignUpForm()
+    elif role == 'therapist':
+        form = TherapistSignUpForm()
+    else:
+        # Optionally handle other roles or raise an error
+        messages.error(request, "Invalid role selected.")
+        return redirect('home')  # Redirect to home or another appropriate page
+    
     if request.method == "POST":
-        form = SignUpForm(request.POST)
+        if role == 'user':
+            form = UserSignUpForm(request.POST)
+        elif role == 'therapist':
+            form = TherapistSignUpForm(request.POST)
+        
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data["username"]
@@ -179,10 +210,9 @@ def register_user(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "You have been registered successfully. Please update your profile.")
-                return redirect("update_profile")  # Redirect to the profile update page instead of home
+                return redirect("update_profile")  # Redirect to the profile update page
 
     return render(request, "register.html", {"form": form})
-
 
 def update_profile(request):
     if request.user.is_authenticated:

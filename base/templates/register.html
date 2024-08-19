@@ -6,9 +6,20 @@
     <br>
     <form method="POST" action="">
       {% csrf_token %}
+      {{ form|crispy }}
       {{ form.as_p }}
+      
+      <div class="form-group">
+        <label for="role">Select Role:</label>
+        <select id="role" name="role" class="form-control">
+          <option value="user">User</option>
+          <option value="therapist">Therapist</option>
+          <option value="administrator">Administrator</option>
+        </select>
+      </div>
+      
       <button type="submit" class="btn btn-secondary">Register</button>
-      <p>Already have an account? <a href="{% url "login" %}">Login here</a></p>
+      <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
     </form>
   </div>
 {% endblock %}

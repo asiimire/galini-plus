@@ -23,6 +23,11 @@ class Meep(models.Model):
 
 # User Profile model
 class Profile(models.Model):
+    USER_ROLES = (
+        ('user', 'User'),
+        ('therapist', 'Therapist'),
+        ('admin', 'Administrator'),
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_modified = models.DateTimeField(User, auto_now_add=True)
     follows = models.ManyToManyField("self",
@@ -39,8 +44,6 @@ class Profile(models.Model):
     linkedin_link =models.CharField(null=True, max_length=100, blank=True)
 
     specialty =models.CharField(null=True, max_length=100, blank=True)
-
-    # is_therapist = models.BooleanField(default=False) # distinguish therapist and user
     
     def __str__(self):
         return self.user.username

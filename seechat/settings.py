@@ -48,7 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base',
     'storages',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # # Backblaze B2 settings
 # DEFAULT_FILE_STORAGE = 'storages.backends.b2.B2Storage'
