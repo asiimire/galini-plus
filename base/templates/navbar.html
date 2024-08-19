@@ -22,6 +22,10 @@
         </li>
 
         <li class="nav-item">
+          <a class="nav-link" href="{% url 'phq9_calculator' %}">Therapist List</a>
+        </li>
+
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'appointment' %}">Book Appointment</a>
         </li>
         {% if user.is_authenticated %}

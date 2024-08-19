@@ -16,6 +16,9 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email as django_validate_email
 # from django.views.generic import ListView, DetailView
 
+# phq9 calc
+def phq9_calculator_view(request):
+    return render(request, 'phq9_calculator.html')
 # home section
 
 def home(request):
