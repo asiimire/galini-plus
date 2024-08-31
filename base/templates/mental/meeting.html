@@ -11,7 +11,6 @@
 
 
 <body>
-    <a class="button" type="button" href="{% url "home" %}">Back to home</a>
     <div id="root"></div>
 </body>
 <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
@@ -33,9 +32,9 @@ window.onload = function () {
         // @param 5: Username
     const roomID = getUrlParams(window.location.href)['roomID'] || (Math.floor(Math.random() * 10000) + "");
     const userID = Math.floor(Math.random() * 10000) + "";
-    const userName = "{{name}}";
-    const appID = 1578556247;
-    const serverSecret = "96f793393fbc350b984d511e0cb7410f";
+    const userName = "{{ name }}";
+    const appID = 65370325;
+    const serverSecret = "54edb2a4966d215871fea90e98dc31c7";
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
 
     
